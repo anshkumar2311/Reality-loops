@@ -1,8 +1,6 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
+import React, { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
@@ -13,21 +11,33 @@ import { AlertCircle } from "lucide-react"
 import Logo from "@/components/logo"
 
 export default function SignUpPage() {
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [termsAccepted, setTermsAccepted] = useState(false)
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    termsAccepted: false,
+  })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value, type, checked } = e.target
+    setFormData((prev) => ({
+      ...prev,
+      [id]: type === "checkbox" ? checked : value,
+    }))
+  }
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError(null)
 
-    // Simple validation
+    const { name, email, password, confirmPassword, termsAccepted } = formData
+
+    // Validation
     if (!name || !email || !password) {
       setError("Please fill in all required fields")
       setIsLoading(false)
@@ -49,8 +59,6 @@ export default function SignUpPage() {
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false)
-
-      // Simulate successful registration
       localStorage.setItem("user", JSON.stringify({ name, email }))
       router.push("/dashboard")
     }, 1500)
@@ -83,122 +91,122 @@ export default function SignUpPage() {
             <TabsTrigger value="oauth">Social</TabsTrigger>
           </TabsList>
           <TabsContent value="email">
-            <div className="mt-4">
-              <form onSubmit={handleSignUp} className="space-y-6">
-                {error && (
-                  <div className="bg-destructive/10 text-destructive p-3 rounded-md flex items-center gap-2">
-                    <AlertCircle className="h-4 w-4" />
-                    <p className="text-sm">{error}</p>
-                  </div>
-                )}
-
-                <div>
-                  <Label htmlFor="name">Full name</Label>
-                  <Input
-                    id="name"
-                    type="text"
-                    placeholder="John Doe"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                    className="mt-1"
-                  />
+            <form onSubmit={handleSignUp} className="space-y-6 mt-4">
+              {error && (
+                <div className="bg-destructive/10 text-destructive p-3 rounded-md flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4" />
+                  <p className="text-sm">{error}</p>
                 </div>
+              )}
 
-                <div>
-                  <Label htmlFor="email">Email address</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="name@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="mt-1"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="mt-1"
-                  />
-                  <p className="mt-1 text-xs text-muted-foreground">Password must be at least 8 characters long</p>
-                </div>
-
-                <div>
-                  <Label htmlFor="confirmPassword">Confirm Password</Label>
-                  <Input
-                    id="confirmPassword"
-                    type="password"
-                    placeholder="••••••••"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value\
-
-                    )}
+              <div>
+                <Label htmlFor="name">Full name</Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="John Doe"
+                  value={formData.name}
+                  onChange={handleChange}
                   required
                   className="mt-1"
-                  />
-                  <p className="mt-1 text-xs text-muted-foreground">Please confirm your password</p>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    id="terms"
-                    type="checkbox"
-                    checked={termsAccepted}
-                    onChange={(e) => setTermsAccepted(e.target.checked)}
-                    required
-                    className="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary"
-                  />
-                  <Label htmlFor="terms" className="ml-2 text-sm">
-                    I agree to the{" "}
-                    <Link href="/terms" className="text-primary hover:underline">
-                      Terms of Service
-                    </Link>{" "}
-                    and{" "}
-                    <Link href="/privacy" className="text-primary hover:underline">
-                      Privacy Policy
-                    </Link>
-                  </Label>
-                </div>
-                <button
-                  type="submit"
-                  className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary ${isLoading ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Creating account..." : "Create account"}
-                </button>
-              </form>
-            </div>
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="email">Email address</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="mt-1"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  className="mt-1"
+                />
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Password must be at least 8 characters long
+                </p>
+              </div>
+
+              <div>
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="••••••••"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  required
+                  className="mt-1"
+                />
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Please confirm your password
+                </p>
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  id="terms"
+                  type="checkbox"
+                  checked={formData.termsAccepted}
+                  onChange={handleChange}
+                  required
+                  className="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary"
+                />
+                <Label htmlFor="terms" className="ml-2 text-sm">
+                  I agree to the{" "}
+                  <Link href="/terms" className="text-primary hover:underline">
+                    Terms of Service
+                  </Link>{" "}
+                  and{" "}
+                  <Link href="/privacy" className="text-primary hover:underline">
+                    Privacy Policy
+                  </Link>
+                </Label>
+              </div>
+
+              <button
+                type="submit"
+                className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary ${
+                  isLoading ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                disabled={isLoading}
+              >
+                {isLoading ? "Creating account..." : "Create account"}
+              </button>
+            </form>
           </TabsContent>
           <TabsContent value="oauth">
             <div className="mt-4 space-y-4">
-              <button
-                type="button"
-                className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-accent hover:bg-accent/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent ${isLoading ? "opacity-50 cursor-not-allowed" : ""
+              {["GitHub", "Google"].map((provider) => (
+                <button
+                  key={provider}
+                  type="button"
+                  className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-accent hover:bg-accent/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent ${
+                    isLoading ? "opacity-50 cursor-not-allowed" : ""
                   }`}
-                disabled={isLoading}
-              >
-                Sign in with GitHub
-              </button>
-              <button
-                type="button"
-                className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-accent hover:bg-accent/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent ${isLoading ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                disabled={isLoading}
-              >
-                Sign in with Google
-              </button>
+                  disabled={isLoading}
+                >
+                  Sign in with {provider}
+                </button>
+              ))}
             </div>
           </TabsContent>
         </Tabs>
+
         <div className="mt-6">
           <p className="text-center text-sm text-muted-foreground">
             By signing up, you agree to our{" "}
