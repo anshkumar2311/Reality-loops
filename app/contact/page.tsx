@@ -139,19 +139,19 @@ export default function ContactPage() {
                 <ContactInfoItem
                   icon={<Mail className="h-6 w-6" />}
                   title="Email"
-                  content="info@realityloops.com"
-                  href="mailto:info@realityloops.com"
+                  content="realityloops1@gmail.com"
+                  href="mailto:realityloops1@gmail.com"
                 />
                 <ContactInfoItem
                   icon={<Phone className="h-6 w-6" />}
                   title="Phone"
-                  content="+1 (555) 123-4567"
-                  href="tel:+15551234567"
+                  content="+91 76025-48747"
+                  href="tel:76025-48747"
                 />
                 <ContactInfoItem
                   icon={<MapPin className="h-6 w-6" />}
                   title="Office"
-                  content="123 AR Street, San Francisco, CA 94103"
+                  content="Phagwara,Punjab,India"
                   href="https://maps.google.com"
                 />
                 <ContactInfoItem
@@ -169,7 +169,7 @@ export default function ContactPage() {
                 <SocialButton name="Twitter" href="#" />
                 <SocialButton name="LinkedIn" href="#" />
                 <SocialButton name="Facebook" href="#" />
-                <SocialButton name="Instagram" href="#" />
+                <SocialButton name="Instagram" href="https://www.instagram.com/reality.loops/" />
               </div>
             </div>
 
